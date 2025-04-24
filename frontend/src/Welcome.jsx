@@ -1,13 +1,12 @@
 import React from 'react';
-import { useNavigate } from "react-router-dom";
-import { useTheme } from "./Theme/Theme";
+import { useTheme } from "./Utility/Theme";
 import { FaLightbulb } from "react-icons/fa";
 
 
-function Welcome() {
+const  Welcome = ()=> {
     const { theme, toggleDarkMode } = useTheme();
-    const navigate = useNavigate();
-
+    const URI = import.meta.env.VITE_BACKEND_URL;
+    
     return (
         <div className="min-h-screen flex items-center justify-center p-6">
             <div className="shadow-2xl rounded-2xl p-10 max-w-2xl w-full text-center">
@@ -29,14 +28,8 @@ function Welcome() {
 
                 <div className="mt-8 flexjustify-center space-x-4">
                     <button
-                        onClick={() => navigate('/register')}
+                        onClick={()=> window.location.href = `${URI}/user/login`}
                         className="px-5 py-3 text-lg rounded bg-yellow-600 text-white hover:bg-blue-700"
-                    >
-                        Register
-                    </button>
-                    <button
-                        onClick={() => navigate('/login')}
-                        className="px-5 py-3 text-lg rounded bg-yellow-200 text-gray-800 hover:bg-gray-300"
                     >
                         Login
                     </button>
@@ -46,6 +39,8 @@ function Welcome() {
     );
 }
 
+function login() {
 
+}
 
 export default Welcome;

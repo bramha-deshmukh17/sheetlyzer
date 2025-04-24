@@ -1,10 +1,12 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import Welcome from "./Welcome";
+import { ThemeProvider } from "./Utility/Theme";
 import ErrorBoundary from "./ErrorBoundary";
-import { ThemeProvider } from "./Theme/Theme";
-
+import Welcome from "./Welcome";
+import Dashboard from './User/Dashboard'
+import Login from './Admin/Login'
+import AdminDashboard from './Admin/Dashboard';
 function App() {
 
   return (
@@ -13,6 +15,11 @@ function App() {
         <Router>
           <Routes>
             <Route path="/" element={<Welcome />} />
+            <Route path="/user/dashboard" element={<Dashboard />} />
+
+            <Route path="/admin/login" element={<Login />} />
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+
           </Routes>
         </Router>
       </ThemeProvider>
