@@ -7,6 +7,7 @@ import Welcome from "./Welcome";
 import Dashboard from './User/Dashboard'
 import Login from './Admin/Login'
 import AdminDashboard from './Admin/Dashboard';
+import PageNotFound from './Utility/PageNotFound';
 function App() {
 
   return (
@@ -20,6 +21,7 @@ function App() {
             <Route path="/admin/login" element={<Login />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
 
+            <Route path="*" element={<PageNotFound />} />
           </Routes>
         </Router>
       </ThemeProvider>
