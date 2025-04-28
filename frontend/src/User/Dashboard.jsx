@@ -9,23 +9,6 @@ const Dashboard = () => {
     const navigate = useNavigate();
 
     const logout = async () => {
-        /*fetch(`${URI}user/logout`, {
-            method: "POST",
-            credentials: "include", // This sends cookies (if any) along with the request.
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                console.log("Logout response:", data); // Log the response to check it.
-                // If the logout was successful, redirect to the login page.
-                if (data.success) {
-                    navigate("/user/login");  // Redirect to the login page.
-                } else {
-                    console.error("Error logging out:", data.error);
-                }
-            })
-            .catch((error) => {
-                console.error("Logout error:", error.message);
-            });*/
 
             window.location.href = `${URI}/user/logout`;
 

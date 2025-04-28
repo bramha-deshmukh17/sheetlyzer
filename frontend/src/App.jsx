@@ -8,6 +8,8 @@ import Dashboard from './User/Dashboard'
 import Login from './Admin/Login'
 import AdminDashboard from './Admin/Dashboard';
 import PageNotFound from './Utility/PageNotFound';
+import ProtectedRoute from './Utility/Protected';
+
 function App() {
 
   return (
@@ -16,10 +18,10 @@ function App() {
         <Router>
           <Routes>
             <Route path="/" element={<Welcome />} />
-            <Route path="/user/dashboard" element={<Dashboard />} />
+            <Route path="/user/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
 
             <Route path="/admin/login" element={<Login />} />
-            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/admin/dashboard" element={<ProtectedRoute admin={true}><AdminDashboard /></ProtectedRoute>} />
 
             <Route path="*" element={<PageNotFound />} />
           </Routes>

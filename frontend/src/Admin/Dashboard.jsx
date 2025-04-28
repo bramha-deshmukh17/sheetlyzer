@@ -10,19 +10,7 @@ const AdminDashboard = () => {
     const navigate = useNavigate(); 
 
     //here we are checking that only logged in admin can view this dashboard by sending request to the backend for verification
-    useEffect(() => {
-        fetch(`${URI}/admin/dashboard`, {
-            method: "GET",
-            credentials: "include",
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                if (data.error) {
-                    navigate("/admin/login");
-                } 
-            })
-            .catch((error) => console.error("Validation error:", error.message));
-    }, [navigate, URI]);
+    
 
     //this is logout which will send request to destroy admin token in backend
     const logout = () => {

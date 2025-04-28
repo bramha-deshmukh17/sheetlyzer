@@ -20,10 +20,11 @@ const UserLogout = (req, res) => {
     res.clearCookie('token');
 
     // tells express-openid-connect to destroy both local and Auth0 session
-    res.oidc.logout({
-        returnTo: process.env.FRONTEND_URL + '/',
-        federated: true            // ensures logout from Auth0 itself
-    });
+    return res.oidc.logout({
+        logoutParams: { returnTo: process.env.FRONTEND_URL + '/' }
+    }); 
+    res.status(200).json({ success: true });
+
 };
 
 module.exports = { UserLogin, UserLogout };

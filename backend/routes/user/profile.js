@@ -12,7 +12,7 @@ const Profile = async (req, res) => {
         }
 
         // Send back the user data
-        res.json(user);
+        res.status(200).json(user);
     } catch (err) {
         res.status(500).json({ error: 'Failed to retrieve or create user', details: err.message });
     }

@@ -5,6 +5,10 @@ const Dashboard = async (req, res) => {
     try {
         const userInfo = req.oidc.user;
 
+        if (!userInfo) {
+            return res.redirect(`${process.env.FRONTEND_URL}/user/dashboard`);
+        }
+
         let user = await User.findOne({ auth0Id: userInfo.sub });
         if (!user) {
             user = await User.create({
