@@ -1,60 +1,95 @@
-import React from 'react';
-import { useEffect } from "react";
-import { useTheme } from "../Utility/Theme";
-import { FaLightbulb } from "react-icons/fa";
-import { useNavigate } from "react-router-dom"; 
+import React, { useEffect, useState } from 'react';
+import { useTheme } from '../Utility/Theme';
+import { FaLightbulb, FaSignOutAlt } from 'react-icons/fa';
+import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, BarChart, Bar } from 'recharts';
+import { useNavigate } from 'react-router-dom';
 
 const AdminDashboard = () => {
     const { theme, toggleDarkMode } = useTheme();
     const URI = import.meta.env.VITE_BACKEND_URL;
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
+    const [newUsersData, setNewUsersData] = useState([]);
+    const [loginData, setLoginData] = useState([]);
 
-    //here we are checking that only logged in admin can view this dashboard by sending request to the backend for verification
-    
+    // fetch analytics data
+    useEffect(() => {
+        fetch(`${URI}/admin/analytics`, {
+            method: 'GET',
+            credentials: 'include',
+        })
+            .then(res => res.json())
+            .then(data => {
+                setNewUsersData(data.newUsers);
+                setLoginData(data.logins);
+            })
+            .catch(err => console.error('Analytics fetch error:', err));
+    }, [URI]);
 
-    //this is logout which will send request to destroy admin token in backend
     const logout = () => {
         fetch(`${URI}/admin/logout`, {
-            method: "POST",
-            credentials: "include",
+            method: 'POST',
+            credentials: 'include',
         })
-            .then((res) => res.json())
-            .then((data) => {
-                if (data.error) {
-                    console.error(data.error);
-                } else {
-                    navigate("/admin/login"); 
+            .then(res => res.json())
+            .then(data => {
+                if (!data.error) {
+                    navigate('/admin/login');
                 }
             })
-            .catch((error) => console.error("Logout error:", error.message));
+            .catch(err => console.error('Logout error:', err));
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center p-6">
-            <div className="shadow-2xl rounded-2xl p-10 max-w-2xl w-full text-center relative">
-                <h1 className="text-4xl font-bold mb-4">Welcome to Sheetlyzer</h1>
-                <p className="text-lg mb-8">
-                    Upload your Excel files, analyze data with powerful 2D/3D charts, and get smart insights instantly.
-                </p>
+        <div className={`min-h-screen `}>
+            {/* Navbar */}
+            <nav className="flex items-center justify-between p-4 shadow-md transition-colors duration-300">
+                <ul className="flex space-x-6">
+                    {['Home', 'Admins', 'Users'].map(item => (
+                        <li key={item}>
+                            <button
+                                onClick={() => navigate(`/admin/${item.toLowerCase()}`)}
+                                className="transition-colors duration-300 hover:text-blue-600 dark:hover:text-blue-300 focus:outline-none"
+                            >
+                                {item}
+                            </button>
+                        </li>
+                    ))}
+                </ul>
+                <div className="flex items-center space-x-4">
+                    {/* Theme Toggle */}
+                    <button
+                        onClick={toggleDarkMode}
+                        title={theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+                        className="p-2 rounded-full transition-transform duration-300 transform hover:scale-110 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none"
+                    >
+                        <FaLightbulb className="text-2xl" />
+                    </button>
 
-               
-                <button
-                    onClick={logout}
-                    className="px-5 py-3 text-lg rounded bg-yellow-600 text-white hover:bg-blue-700 z-10 relative"
-                >
-                    Logout
-                </button>
+                    {/* Logout */}
+                    <button
+                        onClick={logout}
+                        className="flex items-center px-4 py-2 rounded-lg shadow transition-colors duration-300 hover:bg-red-100 dark:hover:bg-red-700 focus:outline-none"
+                    >
+                        <FaSignOutAlt className="text-lg mr-2" />
+                        Logout
+                    </button>
+                </div>
+            </nav>
 
-                <button
-                    onClick={toggleDarkMode}
-                    className="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-200"
-                    title={theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
-                >
-                    <FaLightbulb
-                        className={`text-4xl ${theme === 'dark' ? 'text-yellow-400' : 'text-black'}`}
-                    />
-                </button>
-            </div>
+            {/* Main Content */}
+            <main className="p-6 grid grid-cols-1 gap-6">
+                {/* New Users Line Chart */}
+                <div className="card p-4 w-2/3 rounded-2xl shadow-lg">
+                    <h2 className="text-xl font-semibold mb-4">New Users This Week</h2>
+                    
+                </div>
+
+                {/* User Logins Bar Chart */}
+                <div className="card p-4 w-2/3 rounded-2xl shadow-lg">
+                    <h2 className="text-xl font-semibold mb-4">User Logins Today</h2>
+                    
+                </div>
+            </main>
         </div>
     );
 };
