@@ -17,11 +17,15 @@ const Login = () => {
     //Check for admin session and if available redirect to dashboard
     useEffect(() => {
         fetch(`${URI}/admin/login/check`, {
-            method: 'POST',
+            method: 'GET',
             credentials: 'include', // Include cookies in the request
         })
             .then((res) => res.json())
-            .then((data) => data.error ? navigate('/admin/login') : navigate('/admin/dashboard'))
+            .then((data) => {
+                if (data.message) {
+                    navigate('/admin/dashboard');
+                }
+            })
             .catch((err) => {
                 console.error(err);
             });

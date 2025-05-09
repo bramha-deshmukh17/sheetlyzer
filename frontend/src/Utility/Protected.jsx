@@ -7,7 +7,7 @@ const ProtectedRoute = ({ children, admin = false }) => {
 
     useEffect(() => {
         const url = admin
-            ? `${import.meta.env.VITE_BACKEND_URL}/admin/dashboard`
+            ? `${import.meta.env.VITE_BACKEND_URL}/admin/login/check`
             : `${import.meta.env.VITE_BACKEND_URL}/user/profile`;
 
         fetch(url, {

@@ -36,7 +36,10 @@ const LoginAdmin = async (req, res) => {
             sameSite: "Strict",// Protect against CSRF
             maxAge: 24 * 60 * 60 * 1000,//24 hours
         });
-        res.status(200).json({ message: "Login successful!" });
+        res.status(200).json({
+            message: "Login successful!",
+            userId: user._id
+        });
     } catch (err) {
         console.error("Error logging in:", err);
         res.status(500).json({ message: "Server error." });

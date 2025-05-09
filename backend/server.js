@@ -45,13 +45,11 @@ app.get('/user/profile', requiresAuth(), Profile);
 
 // Admin Register Route
 app.post('/admin/login', LoginAdmin);
-app.post('/admin/login/check', authenticate, (req, res) => {
-    res.status(200).json({ message: "Admin already logged in!" });
+app.get('/admin/login/check', authenticate, (req, res) => {
+    res.status(200).json({ message: "Admin already logged in!", userId: req.user.userId });
 });
 app.post('/admin/logout', LogoutAdmin);
 
-app.get('/admin/dashboard', authenticate, (req, res) => { 
-    res.status(200).json({ message: "Admin details found!" });
-});
+
 
 app.listen(process.env.PORT, () => console.log(`Server running on port ${process.env.PORT}`));
