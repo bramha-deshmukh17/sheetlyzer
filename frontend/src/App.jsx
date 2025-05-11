@@ -9,6 +9,7 @@ import Login from './Admin/Login'
 import AdminDashboard from './Admin/Dashboard';
 import PageNotFound from './Utility/PageNotFound';
 import ProtectedRoute from './Utility/Protected';
+import SheetAnalysis from './User/FileAnalysis';
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Welcome />} />
             <Route path="/user/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="/user/file-analysis" element={<ProtectedRoute><SheetAnalysis /></ProtectedRoute>} />
 
             <Route path="/admin/login" element={<Login />} />
             <Route path="/admin/dashboard" element={<ProtectedRoute admin={true}><AdminDashboard /></ProtectedRoute>} />

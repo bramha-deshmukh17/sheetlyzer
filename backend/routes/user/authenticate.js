@@ -27,9 +27,4 @@ const UserLogout = (req, res) => {
 
 };
 
-module.exports = { UserLogin, UserLogout };
-
-
-
-
 module.exports = {UserLogin, UserLogout}

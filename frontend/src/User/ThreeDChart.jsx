@@ -1,4 +1,3 @@
-import React from 'react';
 import Plot from 'react-plotly.js';
 
 const ThreeDChart = ({ data, xKey, yKey, zKey, chartType = 'scatter3d' }) => {
@@ -35,7 +34,7 @@ const ThreeDChart = ({ data, xKey, yKey, zKey, chartType = 'scatter3d' }) => {
     };
 
     return (
-        <div style={{ width: '100%', height: '500px' }}>
+        <div style={{ width: '90%', height: '500px', margin: '5%' }}>
             <Plot
                 data={[trace]}
                 layout={layout}
