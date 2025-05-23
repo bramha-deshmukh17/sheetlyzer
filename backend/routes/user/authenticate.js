@@ -1,5 +1,3 @@
-//HERE WE ARE CHECING THAT USER IS AUTHENTICATED OR NOT
-
 const UserLogin = (req, res) => {
     if (req.oidc.isAuthenticated()) {
         return res.redirect(`${process.env.FRONTEND_URL}/user/dashboard`);
@@ -15,16 +13,12 @@ const UserLogin = (req, res) => {
 }
 
 //user logout
+// routes/user/authenticate.js
 const UserLogout = (req, res) => {
-    // clears your app’s cookies
-    res.clearCookie('token');
-
-    // tells express-openid-connect to destroy both local and Auth0 session
     return res.oidc.logout({
-        logoutParams: { returnTo: process.env.FRONTEND_URL + '/' }
-    }); 
-    res.status(200).json({ success: true });
-
+        returnTo: `${process.env.FRONTEND_URL}/`
+    });
 };
+  
 
-module.exports = {UserLogin, UserLogout}
+module.exports = { UserLogin, UserLogout }

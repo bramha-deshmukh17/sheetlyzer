@@ -39,8 +39,4 @@ const  Welcome = ()=> {
     );
 }
 
-function login() {
-
-}
-
 export default Welcome;
