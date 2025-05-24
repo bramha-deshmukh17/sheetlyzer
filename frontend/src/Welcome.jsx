@@ -31,7 +31,7 @@ const  Welcome = ()=> {
                         onClick={()=> window.location.href = `${URI}/user/login`}
                         className="px-5 py-3 text-lg rounded bg-yellow-600 text-white hover:bg-blue-700"
                     >
-                        Login
+                        Login / Signup
                     </button>
                 </div>
             </div>

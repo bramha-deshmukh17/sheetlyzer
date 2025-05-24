@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useTheme } from "../Utility/Theme";
-import { FaLightbulb, FaUpload, FaHome, FaHistory, FaDatabase, FaSignOutAlt, FaChartLine } from "react-icons/fa";
+import {  FaUpload,  FaHistory, FaDatabase,  FaChartLine } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import UserNavbar  from '../Utility/UserNav';
 
 const Dashboard = () => {
     const { theme, toggleDarkMode } = useTheme();
@@ -49,30 +50,7 @@ const Dashboard = () => {
     return (
         <div className="min-h-screen flex flex-col" style={{ backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}>
             {/* Navbar */}
-            <nav className="w-full p-4 flex justify-between items-center" style={{ backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}>
-                <div className="flex space-x-4">
-                    <button onClick={() => navigate('/user/dashboard')} className="flex items-center space-x-1 hover:underline">
-                        <FaHome /><span>Home</span>
-                    </button>
-                    <button onClick={() => navigate('/user/file/history', { state: { mode: 'view' } })} className="flex items-center space-x-1 hover:underline">
-                        <FaHistory /><span>History</span>
-                    </button>
-                    <button onClick={() => navigate('/user/file/history', { state: { mode: 'manage' } })} className="flex items-center space-x-1 hover:underline">
-                        <span>View Data</span>
-                    </button>
-                    <button onClick={() => navigate('/user/graph/view', { state: { mode: 'manage' } })} className="flex items-center space-x-1 hover:underline">
-                        <span>View Graph</span>
-                    </button>
-                </div>
-                <div className="flex items-center space-x-4">
-                    <button onClick={toggleDarkMode} className="p-2 rounded-full hover:opacity-80" title={theme === 'dark' ? 'Light Mode' : 'Dark Mode'}>
-                        <FaLightbulb />
-                    </button>
-                    <button onClick={logout} className="flex items-center space-x-1 hover:underline">
-                        <FaSignOutAlt /><span>Logout</span>
-                    </button>
-                </div>
-            </nav>
+            <UserNavbar />
 
             {/* Main Content */}
             <main className="p-6 flex flex-col items-center flex-1 overflow-y-auto space-y-6">
