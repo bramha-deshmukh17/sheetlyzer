@@ -14,7 +14,7 @@ if (!SECRET_KEY) {
 const LoginAdmin = async (req, res) => {
     const { username, password } = req.body;
 
-    //basic validation for username and apssword
+    //basic validation for username and password
     if (!username || username.length < 5 || username.length > 16 || !/^[a-zA-Z0-9_]+$/.test(username)) {
         return res.status(400).json({ error: "Invalid username or password." });
     }
@@ -29,6 +29,11 @@ const LoginAdmin = async (req, res) => {
             return res.status(400).json({ error: "Invalid username or password." });
         }
 
+        // Check if admin is suspended
+        if (user.accountStatus === 'inactive') {
+            return res.status(403).json({ error: "Your account is suspended. Please contact the superadmin." });
+        }
+
         const token = jwt.sign({ userId: user._id }, SECRET_KEY, { expiresIn: "24h" });
         res.cookie("authToken", token, {
             httpOnly: true,// Can't be accessed from JS
@@ -38,7 +43,8 @@ const LoginAdmin = async (req, res) => {
         });
         res.status(200).json({
             message: "Login successful!",
-            userId: user._id
+            userId: user._id,
+            role: user.role // <-- add this
         });
     } catch (err) {
         console.error("Error logging in:", err);

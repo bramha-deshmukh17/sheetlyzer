@@ -10,6 +10,9 @@ import ProtectedRoute from './Utility/Protected';
 import SheetAnalysis from './User/FileAnalysis';
 import FileHistory from "./User/FileHistory";
 import GraphSelector from "./User/GraphSelector";
+import Admin from "./Admin/Admin";
+import ManageUser from "./Admin/User";
+import UserFiles from "./Admin/UserFiles";
 
 function App() {
 
@@ -26,6 +29,9 @@ function App() {
 
             <Route path="/admin/login" element={<Login />} />
             <Route path="/admin/dashboard" element={<ProtectedRoute admin={true}><AdminDashboard /></ProtectedRoute>} />
+            <Route path="/admin/view/admin" element={<ProtectedRoute admin={true}><Admin /></ProtectedRoute>} />
+            <Route path="/admin/view/user" element={<ProtectedRoute admin={true}><ManageUser /></ProtectedRoute>} />
+            <Route path="/admin/user/:userId/files" element={<ProtectedRoute admin={true}><UserFiles /></ProtectedRoute>} />
 
             <Route path="*" element={<PageNotFound />} />
           </Routes>

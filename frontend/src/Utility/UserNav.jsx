@@ -1,6 +1,6 @@
 import React from 'react';
 import { FaLightbulb, FaSignOutAlt, FaHome, FaHistory, FaDatabase, FaChartLine } from 'react-icons/fa';
-import { useTheme } from '../Utility/Theme';
+import { useTheme } from './Theme';
 import { useNavigate } from 'react-router-dom';
 
 /**

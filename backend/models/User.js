@@ -5,6 +5,7 @@ const UserSchema = new mongoose.Schema({
     email: String,
     name: String,
     picture: String,
+    accountStatus: { type: String, enum: ['active', 'inactive'], default: 'active' },
     filesData: [{
         fileName: String,
         fileType: String,

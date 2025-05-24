@@ -15,6 +15,23 @@ const delete_sheet = require('./routes/user/sheet/delete_sheet');
 const FileHistory = require('./routes/user/sheet/file_history');
 const ViewFile = require('./routes/user/sheet/view_sheet');
 const ListFiles = require('./routes/user/sheet/file_list');
+const {
+    verifySuperAdmin,
+    createAdmin,
+    suspendAdmin,
+    activateAdmin,
+    deleteAdmin,
+    getAllAdmins
+} = require('./routes/admin/admin_ops');
+
+const {
+    getAllUsers,
+    suspendUser,
+    activateUser,
+    deleteUser,
+    getUserFiles,
+    deleteUserFile
+} = require('./routes/admin/user_ops');
 
 const app = express();
 app.use(cookieParser());
@@ -62,6 +79,22 @@ app.get('/admin/login/check', authenticate, (req, res) => {
     res.status(200).json({ message: "Admin already logged in!", userId: req.user.userId });
 });
 app.post('/admin/logout', LogoutAdmin);
+
+// Admin management routes (superadmin only)
+app.get('/admin/all', verifySuperAdmin, getAllAdmins);
+app.post('/admin/create', verifySuperAdmin, createAdmin);
+app.patch('/admin/suspend/:id', verifySuperAdmin, suspendAdmin);
+app.patch('/admin/activate/:id', verifySuperAdmin, activateAdmin);
+app.delete('/admin/delete/:id', verifySuperAdmin, deleteAdmin);
+
+// User management routes (admin or superadmin)
+app.get('/admin/users', authenticate, getAllUsers);
+app.patch('/admin/user/suspend/:id', authenticate, suspendUser);
+app.patch('/admin/user/activate/:id', authenticate, activateUser);
+app.delete('/admin/user/delete/:id', authenticate, deleteUser);
+app.get('/admin/user/files/:id', authenticate, getUserFiles);
+app.delete('/admin/user/file/delete/:userId/:fileId', authenticate, deleteUserFile); // <-- add this line
+
 
 app.get('/', (req, res) => {
     res.send('Backend running');

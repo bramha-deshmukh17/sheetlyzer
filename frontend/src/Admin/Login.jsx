@@ -96,7 +96,15 @@ const Login = () => {
                 body: JSON.stringify({ username, password }),
             })
                 .then((res) => res.json())
-                .then((data) => data.error ? setError(data.error) : navigate('/admin/dashboard'))
+                .then((data) => {
+                    if (data.error) {
+                        setError(data.error);
+                    } else {
+                        // After successful login
+                        localStorage.setItem('adminRole', data.role);
+                        navigate('/admin/dashboard');
+                    }
+                })
                 .catch((err) => {
                     console.error(err);
                     setError('An error occurred. Please try again later.');
