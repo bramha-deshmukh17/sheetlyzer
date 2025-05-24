@@ -31,6 +31,7 @@ const {
     getUserFiles,
     deleteUserFile
 } = require('./routes/admin/user_ops');
+const analyticsRoutes = require('./routes/admin/analytics');
 
 const app = express();
 app.use(cookieParser());
@@ -61,7 +62,7 @@ app.use(auth({
 // User Routes
 app.get('/user/login', UserLogin);
 app.get('/user/logout', requiresAuth(), UserLogout);
-app.get('/user/profile', requiresAuth(), checkActive, Profile);
+app.get('/user/profile', requiresAuth(), Profile);
 
 // User file routes
 app.get('/user/file/all', requiresAuth(), checkActive, fileOps.listUserFiles);
@@ -90,8 +91,9 @@ app.patch('/admin/user/suspend/:id', authenticate, suspendUser);
 app.patch('/admin/user/activate/:id', authenticate, activateUser);
 app.delete('/admin/user/delete/:id', authenticate, deleteUser);
 app.get('/admin/user/files/:id', authenticate, getUserFiles);
-app.delete('/admin/user/file/delete/:userId/:fileId', authenticate, deleteUserFile); // <-- add this line
-
+app.delete('/admin/user/file/delete/:userId/:fileId', authenticate, deleteUserFile); 
+//analytics of new user
+app.use(analyticsRoutes);
 
 app.get('/', (req, res) => {
     res.send('Backend running');

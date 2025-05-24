@@ -12,6 +12,6 @@ const UserSchema = new mongoose.Schema({
         fileData: [mongoose.Schema.Types.Mixed],
         createdAt: { type: Date, default: Date.now }
     }],
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model('User', UserSchema);

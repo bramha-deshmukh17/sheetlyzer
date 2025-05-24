@@ -3,6 +3,29 @@ import { useTheme } from '../Utility/Theme';
 import { FaLightbulb, FaSignOutAlt, FaDatabase, FaUserShield, FaUsers } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import AdminNavbar from '../Utility/AdminNav';
+import { Line, Bar } from 'react-chartjs-2';
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend,
+} from 'chart.js';
+
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend
+);
 
 const AdminDashboard = () => {
     const { theme, toggleDarkMode } = useTheme();
@@ -20,26 +43,25 @@ const AdminDashboard = () => {
         })
             .then(res => res.json())
             .then(data => {
-                setNewUsersData(data.newUsers);
-                setLoginData(data.logins);
+                setNewUsersData(data.newUsers); // [{date: '2024-05-01', count: 5}, ...]
             })
             .catch(err => console.error('Analytics fetch error:', err));
     }, [URI]);
 
-    const logout = () => {
-        fetch(`${URI}/admin/logout`, {
-            method: 'POST',
-            credentials: 'include',
-        })
-            .then(res => res.json())
-            .then(data => {
-                if (!data.error) {
-                    navigate('/admin/login');
-                }
-            })
-            .catch(err => console.error('Logout error:', err));
+    // Prepare chart data
+    const newUsersChart = {
+        labels: newUsersData.map(d => d.date),
+        datasets: [
+            {
+                label: 'New Users',
+                data: newUsersData.map(d => d.count),
+                fill: false,
+                borderColor: '#2563eb',
+                backgroundColor: '#2563eb',
+                tension: 0.3,
+            },
+        ],
     };
-
     return (
         <div className={`min-h-screen `}>
             {/* Navbar */}
@@ -48,16 +70,16 @@ const AdminDashboard = () => {
             {/* Main Content */}
             <main className="p-6 flex flex-col items-center space-y-6">
                 {/* New Users Line Chart */}
-                <div className="card p-4 w-2/3 rounded-2xl shadow-lg">
-                    <h2 className="text-xl font-semibold mb-4">New Users This Week</h2>
-
+                <div className="card p-4 w-2/3 rounded-2xl shadow-lg bg-white dark:bg-gray-800">
+                    <h2 className="text-xl font-semibold mb-4 text-white">New Users This Month</h2>
+                    <Line data={newUsersChart} options={{
+                        responsive: true,
+                        plugins: { legend: { display: false } },
+                        scales: { x: { title: { display: true, text: 'Date' } }, y: { title: { display: true, text: 'Users' }, beginAtZero: true } }
+                    }} />
                 </div>
 
-                {/* User Logins Bar Chart */}
-                <div className="card p-4 w-2/3 rounded-2xl shadow-lg">
-                    <h2 className="text-xl font-semibold mb-4">User Logins Today</h2>
-
-                </div>
+            
                 <div className="w-full max-w-2xl flex flex-col space-y-6">
                     {/* Manage Admins */}
                     {role === 'superadmin' && (
