@@ -1,5 +1,6 @@
 const User = require('../../models/User');
 const mongoose = require('mongoose');
+const auth0 = require('../../utils/auth0');
 
 // Get all users
 async function getAllUsers(req, res) {
@@ -10,28 +11,69 @@ async function getAllUsers(req, res) {
         res.status(500).json({ success: false, error: "Failed to fetch users" });
     }
 }
-
-// Suspend user
+// Suspend user (both in MongoDB and Auth0)
 async function suspendUser(req, res) {
     const { id } = req.params;
+
+    // 1) Look up the user to get their Auth0 ID
+    const userRecord = await User.findById(id).select('auth0Id');
+    if (!userRecord) {
+        return res.status(404).json({ error: 'User not found' });
+    }
+
     try {
-        const user = await User.findByIdAndUpdate(id, { accountStatus: 'inactive' }, { new: true });
-        if (!user) return res.status(404).json({ error: "User not found" });
-        res.json({ message: "User suspended", userId: user._id });
-    } catch {
-        res.status(500).json({ error: "Error suspending user" });
+        // 2) Block them in Auth0
+        if (userRecord.auth0Id) {
+            await auth0.users.update(
+                { id: userRecord.auth0Id },
+                { blocked: true }
+            );
+        }
+
+        // 3) Mark them inactive in Mongo
+        const user = await User.findByIdAndUpdate(
+            id,
+            { accountStatus: 'inactive' },
+            { new: true }
+        );
+
+        return res.json({ message: 'User suspended', userId: user._id });
+    } catch (err) {
+        console.error('Error suspending user:', err);
+        return res.status(500).json({ error: 'Error suspending user' });
     }
 }
 
-// Activate user
+// Activate user (both in MongoDB and Auth0)
 async function activateUser(req, res) {
     const { id } = req.params;
+
+    // 1) Look up the user to get their Auth0 ID
+    const userRecord = await User.findById(id).select('auth0Id');
+    if (!userRecord) {
+        return res.status(404).json({ error: 'User not found' });
+    }
+
     try {
-        const user = await User.findByIdAndUpdate(id, { accountStatus: 'active' }, { new: true });
-        if (!user) return res.status(404).json({ error: "User not found" });
-        res.json({ message: "User activated", userId: user._id });
-    } catch {
-        res.status(500).json({ error: "Error activating user" });
+        // 2) Unblock them in Auth0
+        if (userRecord.auth0Id) {
+            await auth0.users.update(
+                { id: userRecord.auth0Id },
+                { blocked: false }
+            );
+        }
+
+        // 3) Mark them active in Mongo
+        const user = await User.findByIdAndUpdate(
+            id,
+            { accountStatus: 'active' },
+            { new: true }
+        );
+
+        return res.json({ message: 'User activated', userId: user._id });
+    } catch (err) {
+        console.error('Error activating user:', err);
+        return res.status(500).json({ error: 'Error activating user' });
     }
 }
 

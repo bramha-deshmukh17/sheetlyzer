@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 const ProtectedRoute = ({ children, admin = false }) => {
     const navigate = useNavigate();
     const [checking, setChecking] = useState(true);
+    const [suspended, setSuspended] = useState(false);
 
     useEffect(() => {
         const url = admin
@@ -16,21 +17,20 @@ const ProtectedRoute = ({ children, admin = false }) => {
         })
             .then(res => {
                 if (admin) {
-                    // admin endpoint should return JSON with { error } or { success }
-                    return res.json().then(data => {
-                        if (data.error) {
-                            navigate('/admin/login', { replace: true });
-                        }
-                    });
+                    if (res.status === 403) {
+                        setSuspended(true);
+                    } else if (res.status !== 200) {
+                        navigate('/admin/login', { replace: true });
+                    }
                 } else {
-                    // user endpoint is protected with requiresAuth()
-                    if (res.status !== 200) {
+                    if (res.status === 403) {
+                        setSuspended(true);
+                    } else if (res.status !== 200) {
                         navigate('/', { replace: true });
                     }
                 }
             })
             .catch(() => {
-                // on network error or any other failure, kick to the login page
                 navigate(admin ? '/admin/login' : '/', { replace: true });
             })
             .finally(() => {
@@ -38,8 +38,18 @@ const ProtectedRoute = ({ children, admin = false }) => {
             });
     }, [admin, navigate]);
 
-    // don’t render the protected UI until the check is done
     if (checking) return null;
+
+    if (suspended) {
+        return (
+            <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg-color)', color: 'var(--text-color)' }}>
+                <div className="p-8 rounded shadow bg-white dark:bg-gray-800 text-center">
+                    <h2 className="text-2xl font-bold text-red-600 mb-4">Account Suspended</h2>
+                    <p className='text-white'>Your account has been suspended. Please contact support for more information.</p>
+                </div>
+            </div>
+        );
+    }
 
     return children;
 };

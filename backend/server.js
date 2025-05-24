@@ -3,18 +3,17 @@ const express = require('express');
 const { auth, requiresAuth } = require('express-openid-connect');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const multer = require('multer');
 const cookieParser = require('cookie-parser');
 const { UserLogin, UserLogout } = require('./routes/user/authenticate');
 const Dashboard = require('./routes/user/dashboard');
 const Profile = require('./routes/user/profile');
 const { LoginAdmin, LogoutAdmin } = require('./routes/admin/login');
 const authenticate = require('./routes/admin/authenticate');
-const sheet_analyzer = require('./routes/user/sheet/sheet_analyzer');
-const delete_sheet = require('./routes/user/sheet/delete_sheet');
-const FileHistory = require('./routes/user/sheet/file_history');
-const ViewFile = require('./routes/user/sheet/view_sheet');
-const ListFiles = require('./routes/user/sheet/file_list');
+const fileOps = require('./routes/user/file_ops');
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
+const checkActive = require('./routes/user/check_active');
+
 const {
     verifySuperAdmin,
     createAdmin,
@@ -59,19 +58,17 @@ app.use(auth({
     clientSecret: process.env.AUTH0_CLIENT_SECRET
 }));
 
-// Configure multer for file uploads
-const upload = multer({ dest: 'uploads/' });
-
 // User Routes
 app.get('/user/login', UserLogin);
 app.get('/user/logout', requiresAuth(), UserLogout);
-app.get('/user/dashboard', requiresAuth(), Dashboard);
-app.get('/user/profile', requiresAuth(), Profile);
-app.post('/user/file/parse', requiresAuth(), upload.single('file'), sheet_analyzer);
-app.delete('/user/file/delete/:id', requiresAuth(), delete_sheet);
-app.get('/user/file/history', requiresAuth(), FileHistory);
-app.get('/user/file/view/:id', requiresAuth(), ViewFile);
-app.get('/user/file/all', requiresAuth(), ListFiles);
+app.get('/user/profile', requiresAuth(), checkActive, Profile);
+
+// User file routes
+app.get('/user/file/all', requiresAuth(), checkActive, fileOps.listUserFiles);
+app.get('/user/file/history', requiresAuth(), checkActive, fileOps.userFileHistory);
+app.get('/user/file/view/:id', requiresAuth(), checkActive, fileOps.viewUserFile);
+app.delete('/user/file/delete/:id', requiresAuth(), checkActive, fileOps.deleteUserSheet);
+app.post('/user/file/parse', requiresAuth(), checkActive, upload.single('file'), fileOps.sheetAnalyzer);
 
 // Admin Register Route
 app.post('/admin/login', LoginAdmin);

@@ -43,9 +43,6 @@ const Dashboard = () => {
             });
     };
 
-    const logout = () => {
-        window.location.href = `${URI}/user/logout`;
-    };
 
     return (
         <div className="min-h-screen flex flex-col" style={{ backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}>
