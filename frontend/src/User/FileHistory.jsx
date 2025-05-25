@@ -1,6 +1,6 @@
 import { useTheme } from "../Utility/Theme";
 import { useState, useEffect } from 'react';
-import { FaHistory, FaTrash, FaEye, FaLightbulb, FaHome, FaSignOutAlt } from "react-icons/fa";
+import { FaTrash, FaEye } from "react-icons/fa";
 import { useNavigate, useLocation } from "react-router-dom";
 import UserNavbar from '../Utility/UserNav';
 
@@ -8,6 +8,7 @@ const FileHistory = () => {
     const URI = import.meta.env.VITE_BACKEND_URL;
     const { theme, toggleDarkMode } = useTheme();
     const [history, setHistory] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [viewedFile, setViewedFile] = useState(null);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [pendingDeleteId, setPendingDeleteId] = useState(null);
@@ -20,10 +21,12 @@ const FileHistory = () => {
 
     // Fetch history
     const fetchHistory = () => {
+        setLoading(true);
         fetch(`${URI}/user/file/history`, { credentials: 'include' })
             .then(res => res.json())
             .then(data => { if (data.success) setHistory(data.history); })
-            .catch(err => console.error(err));
+            .catch(err => console.error(err))
+            .finally(() => setLoading(false));
     };
     useEffect(() => fetchHistory(), []);
 
@@ -56,17 +59,12 @@ const FileHistory = () => {
             .catch(err => console.error(err));
     };
 
-    const logout = () => {
-        window.location.href = `${URI}/user/logout`;
-    };
-
-    // Overlay style
     const overlayStyle = { backgroundColor: 'var(--overlay-bg)' };
 
     return (
         <div className="min-h-screen flex flex-col" style={{ backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}>
             {/* Navbar */}
-             <UserNavbar />
+            <UserNavbar />
 
             <main className="flex-1 p-6 overflow-y-auto">
                 <h1 className="text-3xl font-bold mb-6">File Upload History</h1>
@@ -84,7 +82,7 @@ const FileHistory = () => {
                                     >
                                         ×
                                     </button>
-                                    <thead className="bg-gray-600">
+                                    <thead>
                                         <tr>
                                             {viewedFile.fileData[0] && Object.keys(viewedFile.fileData[0]).map((key, idx) => (
                                                 <th key={idx} className="px-3 py-2 text-left text-sm font-medium">{key}</th>
@@ -120,14 +118,18 @@ const FileHistory = () => {
                     </div>
                 )}
 
-                {/* History Table */}
-                {history.length === 0 ? (
-                    <p className="text-gray-500">No upload history found.</p>
+                {/* History Table or Loader */}
+                {loading ? (
+                    <div className="flex justify-center items-center py-10">
+                        <span className="text-lg ">Loading...</span>
+                    </div>
+                ) : history.length === 0 ? (
+                    <p className="">No upload history found.</p>
                 ) : (
                     <div className="overflow-x-auto">
                         <table className="min-w-full table-auto border">
-                            <thead className="bg-gray-600">
-                                <tr>
+                            <thead>
+                                <tr className="border-b">
                                     <th className="px-4 py-2 text-left text-sm font-medium">File Name</th>
                                     <th className="px-4 py-2 text-left text-sm font-medium">Uploaded At</th>
                                     <th className="px-4 py-2 text-center text-sm font-medium">View</th>
@@ -136,7 +138,7 @@ const FileHistory = () => {
                             </thead>
                             <tbody>
                                 {history.map(item => (
-                                    <tr key={item._id} className="hover:bg-gray-400 transition-colors">
+                                    <tr key={item._id} className="hover:bg-gray-400 border-b transition-colors">
                                         <td className="px-4 py-2 text-sm">{item.name}</td>
                                         <td className="px-4 py-2 text-sm">{new Date(item.uploadedAt).toLocaleString()}</td>
                                         <td className="px-4 py-2 text-center">
