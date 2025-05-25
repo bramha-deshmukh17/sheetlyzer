@@ -88,7 +88,7 @@ const Dashboard = () => {
                             <FaHistory className="text-2xl" />
                             <div>
                                 <h2 className="text-xl font-semibold">View History</h2>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">Browse upload records</p>
+                                <p className="text-sm">Browse upload records</p>
                             </div>
                         </div>
                     </div>
@@ -103,7 +103,7 @@ const Dashboard = () => {
                             <FaDatabase className="text-2xl" />
                             <div>
                                 <h2 className="text-xl font-semibold">Manage My Data</h2>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">Delete or update records</p>
+                                <p className="text-sm">Delete or update records</p>
                             </div>
                         </div>
                     </div>
@@ -118,7 +118,7 @@ const Dashboard = () => {
                             <FaChartLine className="text-2xl" />
                             <div>
                                 <h2 className="text-xl font-semibold">View Graph</h2>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">Visualize your data trends</p>
+                                <p className="text-sm">Visualize your data trends</p>
                             </div>
                         </div>
                     </div>

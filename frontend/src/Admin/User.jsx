@@ -84,7 +84,7 @@ const  ManageUsers = ()=> {
                                         {users.map((user) => (
                                             <tr
                                                 key={user._id}
-                                                className="border-b text-center"
+                                                className="border-b text-center hover:bg-gray-400"
                                             >
                                                 <td className="p-3 break-all text-left">{user.auth0Id}</td>
                                                 <td className="p-3 text-left">{user.name}</td>

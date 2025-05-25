@@ -11,7 +11,7 @@ const Admin = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
-    const [deleteTarget, setDeleteTarget] = useState(null); // <-- For delete confirmation modal
+    const [deleteTarget, setDeleteTarget] = useState(null);
 
     // Fetch all admins
     const fetchAdmins = async () => {
@@ -117,7 +117,7 @@ const Admin = () => {
                                         return (
                                             <tr
                                                 key={admin._id}
-                                                className="border-b text-center"
+                                                className="border-b text-center hover:bg-gray-400"
                                             >
                                                 <td className="p-2">{admin.username}</td>
                                                 <td className="p-2">{admin.role}</td>

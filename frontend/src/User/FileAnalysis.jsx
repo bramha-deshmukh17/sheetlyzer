@@ -98,12 +98,12 @@ const SheetAnalysis = () => {
             <div className="flex flex-1 w-full px-4 py-6 gap-6">
                 {/* Left: AI Insights */}
                 <div className="w-1/4 max-w-xs min-w-[220px]">
-                    <div className="h-full bg-white dark:bg-gray-800 rounded shadow p-4 flex flex-col">
-                        <h2 className="text-xl text-gray-100 font-semibold mb-2">AI Insights</h2>
+                    <div className="h-full rounded shadow p-4 flex flex-col">
+                        <h2 className="text-xl font-semibold mb-2">AI Insights</h2>
                         {aiInsights ? (
-                            <pre className="whitespace-pre-wrap text-gray-800 dark:text-gray-100 overflow-y-auto flex-1">{aiInsights}</pre>
+                            <pre className="whitespace-pre-wrap overflow-y-auto flex-1">{aiInsights}</pre>
                         ) : (
-                            <p className="text-gray-500">No AI insights available.</p>
+                            <p>No AI insights available.</p>
                         )}
                     </div>
                 </div>

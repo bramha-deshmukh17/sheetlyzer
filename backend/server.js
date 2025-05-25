@@ -63,6 +63,7 @@ app.use(auth({
 app.get('/user/login', UserLogin);
 app.get('/user/logout', requiresAuth(), UserLogout);
 app.get('/user/profile', requiresAuth(), Profile);
+app.get('/user/check', requiresAuth(), checkActive, Profile);
 
 // User file routes
 app.get('/user/file/all', requiresAuth(), checkActive, fileOps.listUserFiles);

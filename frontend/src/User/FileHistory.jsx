@@ -84,7 +84,7 @@ const FileHistory = () => {
                                     >
                                         ×
                                     </button>
-                                    <thead className="bg-gray-100 dark:bg-gray-600">
+                                    <thead className="bg-gray-600">
                                         <tr>
                                             {viewedFile.fileData[0] && Object.keys(viewedFile.fileData[0]).map((key, idx) => (
                                                 <th key={idx} className="px-3 py-2 text-left text-sm font-medium">{key}</th>
@@ -93,7 +93,7 @@ const FileHistory = () => {
                                     </thead>
                                     <tbody>
                                         {viewedFile.fileData.map((row, idx) => (
-                                            <tr key={idx} className="hover:bg-gray-200 dark:hover:bg-gray-500 transition-colors">
+                                            <tr key={idx} className="hover:bg-gray-400 transition-colors">
                                                 {Object.values(row).map((val, i) => (
                                                     <td key={i} className="px-3 py-2 text-sm">{val}</td>
                                                 ))}
@@ -126,7 +126,7 @@ const FileHistory = () => {
                 ) : (
                     <div className="overflow-x-auto">
                         <table className="min-w-full table-auto border">
-                            <thead className="bg-gray-100 dark:bg-gray-600">
+                            <thead className="bg-gray-600">
                                 <tr>
                                     <th className="px-4 py-2 text-left text-sm font-medium">File Name</th>
                                     <th className="px-4 py-2 text-left text-sm font-medium">Uploaded At</th>
@@ -136,7 +136,7 @@ const FileHistory = () => {
                             </thead>
                             <tbody>
                                 {history.map(item => (
-                                    <tr key={item._id} className="hover:bg-gray-200 dark:hover:bg-gray-500 transition-colors">
+                                    <tr key={item._id} className="hover:bg-gray-400 transition-colors">
                                         <td className="px-4 py-2 text-sm">{item.name}</td>
                                         <td className="px-4 py-2 text-sm">{new Date(item.uploadedAt).toLocaleString()}</td>
                                         <td className="px-4 py-2 text-center">

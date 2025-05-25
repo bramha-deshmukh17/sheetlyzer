@@ -60,11 +60,11 @@ const GraphSelector = () => {
                 <select
                     value={selectedFileId}
                     onChange={e => setSelectedFileId(e.target.value)}
-                    className="p-2 border rounded w-full max-w-md"
+                    className="p-2 border rounded w-full max-w-md focus:outline-none"
                 >
-                    <option value="">Select an uploaded file</option>
+                    <option value="" style={{backgroundColor: 'var(--bg-color)', color:'var(--text-color)'}}>Select an uploaded file</option>
                     {uploadedFiles.map(file => (
-                        <option key={file._id} value={file._id}>{file.fileName}</option>
+                        <option key={file._id} value={file._id} style={{ backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}>{file.fileName}</option>
                     ))}
                 </select>
 

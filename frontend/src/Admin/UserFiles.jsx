@@ -98,7 +98,7 @@ const UserFiles = () => {
                                 {files.map(file => (
                                     <tr
                                         key={file._id}
-                                        className="border-b hover:bg-gray-50"
+                                        className="border-b hover:bg-gray-400"
                                     >
                                         <td className="px-4 py-2 text-sm break-all">{file.fileName}</td>
                                         <td className="px-4 py-2 text-sm">{file.fileType}</td>
@@ -154,7 +154,7 @@ const UserFiles = () => {
                                     </thead>
                                     <tbody>
                                         {viewedFile.fileData.map((row, idx) => (
-                                            <tr key={idx} className="hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                            <tr key={idx} className="hover:bg-gray-400 transition-colors">
                                                 {Object.values(row).map((val, i) => (
                                                     <td key={i} className="px-3 py-2 text-sm">{val}</td>
                                                 ))}

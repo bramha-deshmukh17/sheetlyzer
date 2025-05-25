@@ -43,7 +43,7 @@ const AdminDashboard = () => {
         })
             .then(res => res.json())
             .then(data => {
-                setNewUsersData(data.newUsers); // [{date: '2024-05-01', count: 5}, ...]
+                setNewUsersData(data.newUsers);
             })
             .catch(err => console.error('Analytics fetch error:', err));
     }, [URI]);
@@ -70,8 +70,8 @@ const AdminDashboard = () => {
             {/* Main Content */}
             <main className="p-6 flex flex-col items-center space-y-6">
                 {/* New Users Line Chart */}
-                <div className="card p-4 w-2/3 rounded-2xl shadow-lg bg-white dark:bg-gray-800">
-                    <h2 className="text-xl font-semibold mb-4 text-white">New Users This Month</h2>
+                <div className="card p-4 w-2/3 rounded-2xl shadow-lg" style={{ backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}>
+                    <h2 className="text-xl font-semibold mb-4">New Users This Month</h2>
                     <Line data={newUsersChart} options={{
                         responsive: true,
                         plugins: { legend: { display: false } },
@@ -92,7 +92,7 @@ const AdminDashboard = () => {
                                 <FaUserShield className="text-2xl" />
                                 <div>
                                     <h2 className="text-xl font-semibold">Manage Admins</h2>
-                                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                                    <p className="text-sm">
                                         View, add, or remove administrator accounts
                                     </p>
                                 </div>
@@ -110,7 +110,7 @@ const AdminDashboard = () => {
                             <FaUsers className="text-2xl" />
                             <div>
                                 <h2 className="text-xl font-semibold">Manage Users</h2>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">
+                                <p className="text-sm">
                                     View, update, or deactivate user accounts
                                 </p>
                             </div>
