@@ -81,10 +81,25 @@ async function activateUser(req, res) {
 async function deleteUser(req, res) {
     const { id } = req.params;
     try {
-        const user = await User.findByIdAndDelete(id);
+        // 1) Find the user to get their Auth0 ID
+        const user = await User.findById(id);
         if (!user) return res.status(404).json({ error: "User not found" });
-        res.json({ message: "User deleted", userId: id });
-    } catch {
+
+        // 2) Delete from Auth0 if auth0Id exists
+        if (user.auth0Id) {
+            try {
+                await auth0.users.delete({ id: user.auth0Id });
+            } catch (err) {
+                // Log but don't block MongoDB deletion if Auth0 user is already gone
+                console.error("Error deleting user from Auth0:", err.message || err);
+            }
+        }
+
+        // 3) Delete from MongoDB
+        await User.findByIdAndDelete(id);
+
+        res.json({ message: "User deleted from Auth0 and MongoDB", userId: id });
+    } catch (err) {
         res.status(500).json({ error: "Error deleting user" });
     }
 }
