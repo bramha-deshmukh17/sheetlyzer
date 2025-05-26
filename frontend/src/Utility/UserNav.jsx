@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { FaLightbulb, FaSignOutAlt, FaHome, FaHistory, FaDatabase, FaChartLine, FaBars } from 'react-icons/fa';
+import React, { useState, useRef, useEffect } from 'react';
+import { FaLightbulb, FaSignOutAlt, FaHome, FaHistory, FaDatabase, FaChartLine, FaBars, FaUser, FaChevronDown } from 'react-icons/fa';
 import { useTheme } from './Theme';
 import { useNavigate } from 'react-router-dom';
 
@@ -10,10 +10,27 @@ export default function UserNavbar() {
     const { theme, toggleDarkMode } = useTheme();
     const navigate = useNavigate();
     const [menuOpen, setMenuOpen] = useState(false);
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const dropdownRef = useRef();
 
     const logout = () => {
         window.location.href = `${import.meta.env.VITE_BACKEND_URL}/user/logout`;
     };
+
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setDropdownOpen(false);
+            }
+        }
+        if (dropdownOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [dropdownOpen]);
 
     return (
         <nav className="sticky top-0 z-50 flex items-center justify-between p-4 shadow-md transition-colors duration-300" style={{backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}>
@@ -52,13 +69,33 @@ export default function UserNavbar() {
                     <FaLightbulb className="text-2xl" />
                 </button>
 
-                <button
-                    onClick={logout}
-                    className="flex items-center px-4 py-2 rounded-lg shadow transition-colors duration-300 hover:bg-red-700 focus:outline-none"
-                >
-                    <FaSignOutAlt className="text-lg mr-2" />
-                    Logout
-                </button>
+                {/* Profile/Logout Dropdown */}
+                <div className="relative" ref={dropdownRef}>
+                    <button
+                        onClick={() => setDropdownOpen((open) => !open)}
+                        className="flex items-center cursor-pointer px-4 py-2 rounded-lg shadow transition-colors duration-300 focus:outline-none"
+                    >
+                        <FaUser className="text-lg mr-2" />
+                        <span>Account</span>
+                        <FaChevronDown className="ml-1" />
+                    </button>
+                    {dropdownOpen && (
+                        <div className="absolute right-0 mt-2 w-40 rounded shadow-lg py-2 z-50" style={{ backgroundColor: 'var(--bg-color)', color: 'var(--text-color)' }}>
+                            <button
+                                onClick={() => { setDropdownOpen(false); navigate('/user/profile'); }}
+                                className="w-full flex items-center px-4 py-2 text-left hover:bg-gray-400 transition-colors"
+                        >
+                            <FaUser className="mr-2" /> Profile
+                        </button>
+                        <button
+                            onClick={logout}
+                            className="w-full flex items-center px-4 py-2 text-left hover:bg-red-100 dark:hover:bg-red-700 text-red-600 dark:text-red-300 transition-colors"
+                        >
+                            <FaSignOutAlt className="mr-2" /> Logout
+                        </button>
+                    </div>
+                    )}
+                </div>
             </div>
         </nav>
 

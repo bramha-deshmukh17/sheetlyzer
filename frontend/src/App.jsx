@@ -13,6 +13,7 @@ import GraphSelector from "./User/GraphSelector";
 import Admin from "./Admin/Admin";
 import ManageUser from "./Admin/User";
 import UserFiles from "./Admin/UserFiles";
+import UserProfile from "./User/UserProfile";
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
             <Route path="/user/file/analysis" element={<ProtectedRoute><SheetAnalysis /></ProtectedRoute>} />
             <Route path="/user/file/history" element={<ProtectedRoute><FileHistory /></ProtectedRoute>} />
             <Route path="/user/graph/view" element={<ProtectedRoute><GraphSelector /></ProtectedRoute>} />
+            <Route path="/user/profile" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
 
             <Route path="/admin/login" element={<Login />} />
             <Route path="/admin/dashboard" element={<ProtectedRoute admin={true}><AdminDashboard /></ProtectedRoute>} />

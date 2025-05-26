@@ -5,14 +5,13 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const { UserLogin, UserLogout } = require('./routes/user/authenticate');
-const Dashboard = require('./routes/user/dashboard');
-const Profile = require('./routes/user/profile');
 const { LoginAdmin, LogoutAdmin } = require('./routes/admin/login');
 const authenticate = require('./routes/admin/authenticate');
 const fileOps = require('./routes/user/file_ops');
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
 const checkActive = require('./routes/user/check_active');
+const { Profile, UpdateProfile } = require('./routes/user/profile');
 
 const {
     verifySuperAdmin,
@@ -63,6 +62,7 @@ app.use(auth({
 app.get('/user/login', UserLogin);
 app.get('/user/logout', requiresAuth(), UserLogout);
 app.get('/user/profile', requiresAuth(), Profile);
+app.patch('/user/profile/update', requiresAuth(), checkActive, UpdateProfile);
 app.get('/user/check', requiresAuth(), checkActive, Profile);
 
 // User file routes

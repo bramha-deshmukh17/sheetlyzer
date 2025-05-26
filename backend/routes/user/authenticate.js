@@ -1,4 +1,4 @@
-const UserLogin = (req, res, next) => {
+const UserLogin = (req, res) => {
     if (req.oidc.isAuthenticated()) {
         return res.redirect(`${process.env.FRONTEND_URL}/user/dashboard`);
     }
@@ -8,7 +8,6 @@ const UserLogin = (req, res, next) => {
             redirect_uri: process.env.AUTH0_CALLBACK_URL
         }
     });
-    next();
 }
 
 //user logout
