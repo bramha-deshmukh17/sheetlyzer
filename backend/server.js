@@ -11,7 +11,7 @@ const fileOps = require('./routes/user/file_ops');
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
 const checkActive = require('./routes/user/check_active');
-const { Profile, UpdateProfile } = require('./routes/user/profile');
+const { Profile, UpdateProfile, DeleteSelf } = require('./routes/user/profile');
 
 const {
     verifySuperAdmin,
@@ -64,6 +64,7 @@ app.get('/user/logout', requiresAuth(), UserLogout);
 app.get('/user/profile', requiresAuth(), Profile);
 app.patch('/user/profile/update', requiresAuth(), checkActive, UpdateProfile);
 app.get('/user/check', requiresAuth(), checkActive, Profile);
+app.delete('/user/profile', requiresAuth(), DeleteSelf);
 
 // User file routes
 app.get('/user/file/all', requiresAuth(), checkActive, fileOps.listUserFiles);

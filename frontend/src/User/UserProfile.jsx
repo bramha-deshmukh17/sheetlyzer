@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTheme } from "../Utility/Theme";
 import UserNavbar from "../Utility/UserNav";
+import { useNavigate } from "react-router-dom";
 
 const URI = import.meta.env.VITE_BACKEND_URL;
 
@@ -11,6 +12,9 @@ export default function UserProfile() {
     const [form, setForm] = useState({ name: "", picture: "" });
     const [loading, setLoading] = useState(true);
     const [msg, setMsg] = useState("");
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [deleting, setDeleting] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetch(`${URI}/user/profile`, { credentials: "include" })
@@ -42,6 +46,25 @@ export default function UserProfile() {
             .catch(() => setMsg("Update failed"));
     };
 
+    const handleDeleteAccount = () => {
+        setDeleting(true);
+        fetch(`${URI}/user/profile`, {
+            method: "DELETE",
+            credentials: "include"
+        })
+            .then(res => res.json())
+            .then(() => {
+                setDeleting(false);
+                localStorage.clear();
+                sessionStorage.clear();
+                window.location.href = `${import.meta.env.VITE_BACKEND_URL}/user/logout`;
+            })
+            .catch(() => {
+                setDeleting(false);
+                setMsg("Failed to delete account");
+            });
+    };
+
     if (loading) return <div className="p-8">Loading...</div>;
 
     return (
@@ -59,9 +82,15 @@ export default function UserProfile() {
                                 <div className="text-gray-500">{profile.email}</div>
                             </div>
                         </div>
-                        <div className="flex justify-center">
+                        <div className="flex justify-center space-x-4">
                             <button className="px-4 py-2 rounded bg-blue-600 text-white" onClick={() => setEdit(true)}>
                                 Edit Profile
+                            </button>
+                            <button
+                                className="px-4 py-2 rounded bg-red-600 text-white"
+                                onClick={() => setShowDeleteModal(true)}
+                            >
+                                Delete Account
                             </button>
                         </div>
                     </>
@@ -92,6 +121,31 @@ export default function UserProfile() {
                             <button type="button" className="px-4 py-2 rounded bg-gray-400 text-white" onClick={() => setEdit(false)}>Cancel</button>
                         </div>
                     </form>
+                )}
+
+                {/* Delete Account Modal */}
+                {showDeleteModal && (
+                    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-40">
+                        <div className="bg-white dark:bg-gray-800 p-6 rounded shadow-md w-96">
+                            <h2 className="text-xl font-bold mb-4 text-red-600">Delete Account</h2>
+                            <p className="mb-4 text-gray-700 dark:text-gray-300">
+                                Are you sure you want to delete your account? <br />
+                                <span className="text-red-600 font-semibold">This action cannot be undone.</span>
+                            </p>
+                            <div className="flex justify-end space-x-2">
+                                <button
+                                    className="px-4 py-2 rounded bg-gray-400 text-white"
+                                    onClick={() => setShowDeleteModal(false)}
+                                    disabled={deleting}
+                                >Cancel</button>
+                                <button
+                                    className="px-4 py-2 rounded bg-red-600 text-white"
+                                    onClick={handleDeleteAccount}
+                                    disabled={deleting}
+                                >{deleting ? "Deleting..." : "Delete"}</button>
+                            </div>
+                        </div>
+                    </div>
                 )}
             </div>
         </div>

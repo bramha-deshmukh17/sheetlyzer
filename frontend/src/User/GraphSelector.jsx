@@ -54,7 +54,7 @@ const GraphSelector = () => {
             {/* Navbar */}
              <UserNavbar />
 
-            <h1 className="text-3xl ml-5 font-bold">Select File for Graph View</h1>
+            <h1 className="text-3xl ml-5 p-6 font-bold">Select File for Graph View</h1>
 
             <div className="flex flex-col items-center space-y-4">
                 <select

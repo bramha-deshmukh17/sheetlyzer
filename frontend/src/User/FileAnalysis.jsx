@@ -92,7 +92,7 @@ const SheetAnalysis = () => {
             {/* Navbar */}
              <UserNavbar />
 
-            <h1 className="text-3xl ml-5 font-bold">Sheet Analysis</h1>
+            <h1 className="text-3xl ml-5 p-6 font-bold">Sheet Analysis</h1>
 
             {/* Two-column layout */}
             <div className="flex flex-1 w-full px-4 py-6 gap-6">
